@@ -39,6 +39,7 @@
 
 #include <dyn_core.h>
 #include <dyn_token.h>
+#include "dyn_hashkit.h"
 
 rstatus_t 
 hash_murmur(const char *key, size_t length, struct dyn_token *token)

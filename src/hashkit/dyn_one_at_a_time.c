@@ -36,6 +36,7 @@
 
 #include <dyn_core.h>
 #include <dyn_token.h>
+#include "dyn_hashkit.h"
 
 rstatus_t
 hash_one_at_a_time(const char *key, size_t key_length, struct dyn_token *token)

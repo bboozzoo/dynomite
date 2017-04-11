@@ -30,6 +30,7 @@
 
 #include <dyn_token.h>
 #include <dyn_core.h>
+#include "dyn_hashkit.h"
 
 #undef get16bits
 #if (defined(__GNUC__) && defined(__i386__))

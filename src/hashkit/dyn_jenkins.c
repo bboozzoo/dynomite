@@ -34,6 +34,7 @@
 
 #include <dyn_token.h>
 #include <dyn_core.h>
+#include "dyn_hashkit.h"
 
 #define hashsize(n) ((uint32_t)1<<(n))
 #define hashmask(n) (hashsize(n)-1)

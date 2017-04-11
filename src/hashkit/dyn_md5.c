@@ -22,6 +22,7 @@
 
 #include <dyn_token.h>
 #include <dyn_core.h>
+#include "dyn_hashkit.h"
 
 /*
  * This is an OpenSSL-compatible implementation of the RSA Data Security, Inc.
