@@ -194,11 +194,35 @@ AS_IF([test "x$disable_stats" = xyes],
   [AC_DEFINE([HAVE_STATS], [1], [Define to 1 if stats is not disabled])])
 AC_MSG_RESULT($disable_stats)
 
-# Untar the yaml-0.1.4 in contrib/ before config.status is rerun
-AC_CONFIG_COMMANDS_PRE([tar xvfz contrib/yaml-0.1.4.tar.gz -C contrib])
+AC_ARG_WITH(host-libyaml,
+  [AS_HELP_STRING([--with-host-libyaml]
+    [use host provided libyam @<:@default=no@:>@])
+  ], [], [with_host_libyaml=no])
 
-# Call yaml-0.1.4 ./configure recursively
-AC_CONFIG_SUBDIRS([contrib/yaml-0.1.4])
+AS_IF([test "x$with_host_libyaml" = "xno"],
+  [
+  # use bundled libyaml
+
+   # Untar the yaml-0.1.4 in contrib/ before config.status is rerun
+   AC_CONFIG_COMMANDS_PRE([tar xvfz contrib/yaml-0.1.4.tar.gz -C contrib])
+   # Call yaml-0.1.4 ./configure recursively
+   AC_CONFIG_SUBDIRS([contrib/yaml-0.1.4])
+
+   YAML_CFLAGS=\${top_srcdir}/contrib/yaml-0.1.4/include
+   YAML_LIBS=\${top_builddir}/contrib/yaml-0.1.4/src/.libs/libyaml.a
+   AC_SUBST([YAML_CFLAGS])
+   AC_SUBST([YAML_LIBS])
+   ])
+
+AS_IF([test "x$with_host_libyaml" = "xyes"],
+  [
+  AC_MSG_NOTICE([using host's libyaml])
+  # use pkg-config to find host's libyaml
+  PKG_CHECK_MODULES([YAML], [yaml-0.1])
+  AC_SUBST([YAML_CFLAGS])
+  AC_SUBST([YAML_LIBS])
+  ])
+AM_CONDITIONAL([USE_BUNDLED_LIBYAML], [test "x$with_host_libyaml" = "xno"])
 
 # Define Makefiles
 AC_CONFIG_FILES([Makefile
