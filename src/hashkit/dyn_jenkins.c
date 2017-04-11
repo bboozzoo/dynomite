@@ -129,8 +129,8 @@ hash_jenkins(const char *key, size_t length, struct dyn_token *token)
     case 3 : a+=k[0]&0xffffff; break;
     case 2 : a+=k[0]&0xffff; break;
     case 1 : a+=k[0]&0xff; break;
-    case 0 : return c;              /* zero length strings require no mixing */
-    default: return c;
+    case 0 : return (rstatus_t) c;              /* zero length strings require no mixing */
+    default: return (rstatus_t) c;
     }
 
   }
@@ -179,8 +179,8 @@ hash_jenkins(const char *key, size_t length, struct dyn_token *token)
              break;
     case 1 : a+=k8[0];
              break;
-    case 0 : return c;                     /* zero length requires no mixing */
-    default: return c;
+    case 0 : return (rstatus_t) c;                     /* zero length requires no mixing */
+    default: return (rstatus_t) c;
     }
 
   }
@@ -225,8 +225,8 @@ hash_jenkins(const char *key, size_t length, struct dyn_token *token)
     case 2 : a+=((uint32_t)k[1])<<8;
     case 1 : a+=k[0];
              break;
-    case 0 : return c;
-    default : return c;
+    case 0 : return (rstatus_t) c;
+    default : return (rstatus_t) c;
     }
 #ifndef WORDS_BIGENDIAN
   }
