@@ -33,7 +33,7 @@ struct datacenter;
 struct rack;
 struct dyn_ring;
 
-static void
+static inline void
 cleanup_charptr(char **ptr) {
     if (*ptr)
         free(*ptr);
