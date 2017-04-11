@@ -120,10 +120,10 @@ hash_crc32(const char *key, size_t key_length, struct dyn_token *token)
     return DN_OK;
 }
 
-uint32_t
+rstatus_t
 hash_crc32a(const char *key, size_t key_length, struct dyn_token *token)
 {
-    const uint8_t *p = key;
+    const uint8_t *p = (const uint8_t*)key;
     uint32_t crc;
 
     crc = ~0U;
@@ -143,16 +143,16 @@ hash_crc32a(const char *key, size_t key_length, struct dyn_token *token)
 #define _CRC32_(crc, ch)     ((crc) = ((crc) >> 8) ^ crc32tab[((crc) ^ (ch)) &\
                                                               0xff])
 uint32_t
-crc32_sz(const char *buf, int buf_length, uint32_t in_crc32)
+crc32_sz(const char *buf, size_t buf_length, uint32_t in_crc32)
 {
     uint32_t crc = ~in_crc32;
     const char  *p;
-    int         len,
+    size_t      len,
                 nr;
 
     len = 0;
     nr = buf_length;
     for (len += nr, p = buf; nr--; ++p)
-        _CRC32_(crc, tolower((unsigned int) *p));
+        _CRC32_(crc, (uint32_t) tolower((unsigned int) *p));
     return ~crc;
 }
