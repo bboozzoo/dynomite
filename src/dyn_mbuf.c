@@ -256,7 +256,7 @@ mbuf_remove(struct mhdr *mhdr, struct mbuf *mbuf)
  * enough space for n bytes.
  */
 void
-mbuf_copy(struct mbuf *mbuf, uint8_t *pos, size_t n)
+mbuf_copy(struct mbuf *mbuf, const uint8_t *pos, size_t n)
 {
     if (n == 0) {
         return;
