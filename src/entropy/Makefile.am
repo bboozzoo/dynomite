@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-AM_CPPFLAGS = -I $(top_srcdir)/src
+AM_CPPFLAGS = -I $(top_srcdir)/src -I$(top_srcdir)/src/event
 
 AM_CFLAGS = -Wall -Wshadow
 AM_CFLAGS += -Wpointer-arith

@@ -31,7 +31,7 @@
 #include <netinet/in.h>
 
 #include "dyn_core.h"
-
+#include "dyn_event.h"
 
 /**
  * Anti - Entropy
