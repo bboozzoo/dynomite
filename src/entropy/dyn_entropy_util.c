@@ -617,6 +617,8 @@ entropy_callback(void *arg1, void *arg2)
     	}
     }
 
+ /* resource cleanup */
+error:
 
 
     if(ENCRYPT_FLAG == 1 || DECRYPT_FLAG == 1)
@@ -624,20 +626,6 @@ entropy_callback(void *arg1, void *arg2)
 
     if(peer_socket > -1)
     	close(peer_socket);
-
-    return;
-
-/* resource cleanup */
-error:
-
-	if(ENCRYPT_FLAG == 1 || DECRYPT_FLAG == 1)
-		entropy_crypto_deinit();
-
-    if(peer_socket > -1)
-    	close(peer_socket);
-
-	return;
-
 }
 
 void *
