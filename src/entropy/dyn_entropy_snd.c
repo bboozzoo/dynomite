@@ -236,7 +236,7 @@ entropy_snd_start(int peer_socket, size_t header_size, size_t buffer_size, size_
         }
 
         /* checking for errors */
-    	if (aof_bytes_read < 0){
+    	if (aof_bytes_read == 0){
     		 log_error("Error reading chunk of AOF file --> %s", strerror(errno));
          	 goto error;
     	}
