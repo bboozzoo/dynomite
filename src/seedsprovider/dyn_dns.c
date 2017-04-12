@@ -85,12 +85,12 @@ dns_get_seeds(struct context * ctx, struct mbuf *seeds_buf)
     }
 
     unsigned char buf[BUFSIZ];
-    int r = res_query(txtName, C_IN, T_TXT, buf, sizeof(buf));
-    if (r == -1) {
+    int qr = res_query(txtName, C_IN, T_TXT, buf, sizeof(buf));
+    if (qr == -1) {
         log_debug(LOG_DEBUG, "DNS response for %s: %s", txtName, hstrerror(h_errno));
         return DN_NOOPS;
     }
-    if (r >= sizeof(buf)) {
+    if (qr >= sizeof(buf)) {
         log_debug(LOG_DEBUG, "DNS reply is too large for %s: %d, bufsize: %d", txtName, r, sizeof(buf));
         return DN_NOOPS;
     }
@@ -102,7 +102,7 @@ dns_get_seeds(struct context * ctx, struct mbuf *seeds_buf)
     int na = ntohs(hdr->ancount);
 
     ns_msg m;
-    int k = ns_initparse(buf, r, &m);
+    int k = ns_initparse(buf, qr, &m);
     if (k == -1) {
         log_debug(LOG_DEBUG, "ns_initparse error for %s: %s", txtName, strerror(errno));
         return DN_NOOPS;
@@ -110,8 +110,8 @@ dns_get_seeds(struct context * ctx, struct mbuf *seeds_buf)
     int i;
     ns_rr rr;
     for (i = 0; i < na; ++i) {
-        int k = ns_parserr(&m, ns_s_an, i, &rr);
-        if (k == -1) {
+        int pk = ns_parserr(&m, ns_s_an, i, &rr);
+        if (pk == -1) {
             log_debug(LOG_DEBUG, "ns_parserr for %s: %s", txtName, strerror (errno));
             return DN_NOOPS;
         }
