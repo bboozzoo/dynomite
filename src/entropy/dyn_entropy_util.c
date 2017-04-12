@@ -110,7 +110,7 @@ static unsigned char *theIv = (unsigned char*)"0123456789012345";
  * Initialize crypto libraries per connection
  */
 void
-entropy_crypto_init()
+entropy_crypto_init(void)
 {
 	    ERR_load_crypto_strings();
 	    OpenSSL_add_all_algorithms();
@@ -124,7 +124,7 @@ entropy_crypto_init()
  * Clean crypto libraries per connection
  */
 void
-entropy_crypto_deinit()
+entropy_crypto_deinit(void)
 {
 	EVP_cleanup();
 	ERR_free_strings();

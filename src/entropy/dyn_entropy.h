@@ -44,6 +44,9 @@ struct entropy {
     int               redis_sd;				  /* Redis socket descriptor for AOF */
 };
 
+void entropy_crypto_init(void);
+void entropy_crypto_deinit(void);
+
 struct entropy *entropy_init(struct context *ctx, uint16_t entropy_port, char *entropy_ip);
 void *entropy_loop(void *arg);
 rstatus_t entropy_conn_start(struct entropy *cn);
