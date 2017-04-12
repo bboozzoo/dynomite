@@ -116,7 +116,7 @@ dns_get_seeds(struct context * ctx, struct mbuf *seeds_buf)
             return DN_NOOPS;
         }
         mbuf_rewind(seeds_buf);
-        unsigned char *r = ns_rr_rdata(rr);
+        const unsigned char *r = ns_rr_rdata(rr);
         if (r[0] >= ns_rr_rdlen(rr)) {
             log_debug(LOG_DEBUG, "invalid TXT length for %s: %d < %d", txtName, r[0], ns_rr_rdlen(rr));
             return DN_NOOPS;
