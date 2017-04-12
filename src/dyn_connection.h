@@ -142,7 +142,7 @@ struct conn {
     connection_type_t  type;
 };
 
-char * conn_get_type_string(struct conn *conn);
+char * conn_get_type_string(const struct conn *conn);
 
 static inline rstatus_t
 conn_cant_handle_response(struct conn *conn, msgid_t reqid, struct msg *resp)
@@ -189,11 +189,11 @@ conn_handle_response(struct conn *conn, msgid_t msgid, struct msg *rsp)
         (conn)->ops->dequeue_outq(ctx, conn, msg)
 TAILQ_HEAD(conn_tqh, conn);
 
-int print_conn(FILE *stream, struct conn *conn);
+int print_conn(FILE *stream, const struct conn *conn);
 void conn_set_write_consistency(struct conn *conn, consistency_t cons);
-consistency_t conn_get_write_consistency(struct conn *conn);
+consistency_t conn_get_write_consistency(const struct conn *conn);
 void conn_set_read_consistency(struct conn *conn, consistency_t cons);
-consistency_t conn_get_read_consistency(struct conn *conn);
+consistency_t conn_get_read_consistency(const struct conn *conn);
 struct context *conn_to_ctx(struct conn *conn);
 struct conn *test_conn_get(void);
 struct conn *conn_get(void *owner, bool client);

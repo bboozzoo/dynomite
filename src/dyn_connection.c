@@ -101,7 +101,7 @@ consistency_t g_read_consistency = DEFAULT_READ_CONSISTENCY;
 consistency_t g_write_consistency = DEFAULT_WRITE_CONSISTENCY;
 
 inline char *
-conn_get_type_string(struct conn *conn)
+conn_get_type_string(const struct conn *conn)
 {
     switch(conn->type) {
         case CONN_UNSPECIFIED: return "UNSPEC";
@@ -233,7 +233,7 @@ _conn_get(void)
 }
 
 int
-print_conn(FILE *stream, struct conn *conn)
+print_conn(FILE *stream, const struct conn *conn)
 {
     if ((conn->type == CONN_DNODE_PEER_PROXY) ||
         (conn->type == CONN_PROXY)) {
@@ -265,7 +265,7 @@ conn_set_read_consistency(struct conn *conn, consistency_t cons)
 }
 
 inline consistency_t
-conn_get_read_consistency(struct conn *conn)
+conn_get_read_consistency(const struct conn *conn)
 {
     //return conn->read_consistency;
     return g_read_consistency;
@@ -278,7 +278,7 @@ conn_set_write_consistency(struct conn *conn, consistency_t cons)
 }
 
 inline consistency_t
-conn_get_write_consistency(struct conn *conn)
+conn_get_write_consistency(const struct conn *conn)
 {
     //return conn->write_consistency;
     return g_write_consistency;
