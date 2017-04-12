@@ -87,8 +87,9 @@ set_int_dyn_token(struct dyn_token *token, uint32_t val)
 
 void print_dyn_token(struct dyn_token *token, int num_tabs)
 {
-	if (token == NULL)
+	if (token == NULL) {
 		log_debug(LOG_VERB, "Token is null!!!!!");
+  }
 
 	if (num_tabs < 0)
 		num_tabs = 0;
