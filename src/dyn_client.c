@@ -385,21 +385,6 @@ req_filter(struct context *ctx, struct conn *conn, struct msg *req)
     return false;
 }
 
-static void
-send_rsp_integer(struct context *ctx, struct conn *c_conn, struct msg *req)
-{
-    //do nothing
-    struct msg *rsp = msg_get_rsp_integer(c_conn);
-    req->selected_rsp = rsp;
-    rsp->peer = req;
-    req->selected_rsp = rsp;
-
-    req->done = 1;
-    //req->pre_coalesce(req);
-    rstatus_t status = conn_event_add_out(c_conn);
-    IGNORE_RET_VAL(status);
-}
-
 /* Expects req to be in the conn's outq already */
 void
 req_forward_error(struct context *ctx, struct conn *conn, struct msg *req,
