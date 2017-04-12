@@ -620,6 +620,7 @@ core_core(void *arg, uint32_t events)
 void
 core_debug(struct context *ctx)
 {
+#ifdef DN_DEBUG_LOG
 	log_debug(LOG_VERB, "=====================Peers info=====================");
     struct server_pool *sp = &ctx->pool;
     log_debug(LOG_VERB, "Server pool          : '%.*s'", sp->name);
@@ -660,6 +661,7 @@ core_debug(struct context *ctx)
         }
     }
 	log_debug(LOG_VERB, "...............................................................................");
+#endif
 }
 
 /**
