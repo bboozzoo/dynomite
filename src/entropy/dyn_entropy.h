@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+#ifndef _DYN_ENTROPY_H_
+#define _DYN_ENTROPY_H_
 
 
 #include "dyn_core.h"
@@ -61,3 +62,4 @@ rstatus_t entropy_snd_start(int peer_socket, int header_size, int buffer_size, i
 rstatus_t entropy_rcv_start(int peer_socket, int header_size, int buffer_size, int cipher_size);
 
 
+#endif  /* _DYN_ENTROPY_H_ */
