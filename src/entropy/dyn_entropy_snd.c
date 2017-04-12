@@ -46,7 +46,7 @@
  */
 
 static rstatus_t
-entropy_redis_compact_aof(int buffer_size){
+entropy_redis_compact_aof(size_t buffer_size){
 	char 			command[buffer_size];
     int 			sys_ret = 0;
 
@@ -80,22 +80,22 @@ entropy_redis_compact_aof(int buffer_size){
  *
  */
 static rstatus_t
-header_send(struct stat file_stat, int peer_socket, int header_size)
+header_send(struct stat file_stat, int peer_socket, size_t header_size)
 {
-    char			header_buff[header_size];
+    uint8_t			header_buff[header_size];
     ssize_t         transmit_len;
 
     memset(&header_buff[0], 0, sizeof(header_buff));
-    header_buff[0] = (int)((((int)file_stat.st_size) >> 24) & 0xFF);
-    header_buff[1] = (int)((((int)file_stat.st_size) >> 16) & 0xFF);
-    header_buff[2] = (int)((((int)file_stat.st_size) >> 8) & 0XFF);
-    header_buff[3] = (int)((((int)file_stat.st_size) & 0XFF));
+    header_buff[0] = (uint8_t)((((int)file_stat.st_size) >> 24) & 0xFF);
+    header_buff[1] = (uint8_t)((((int)file_stat.st_size) >> 16) & 0xFF);
+    header_buff[2] = (uint8_t)((((int)file_stat.st_size) >> 8) & 0XFF);
+    header_buff[3] = (uint8_t)((((int)file_stat.st_size) & 0XFF));
 
     // TODO: encrypt flag does not have to be int but a single byte.
-    header_buff[4] = (int)((ENCRYPT_FLAG >> 24) & 0xFF);
-    header_buff[5] = (int)((ENCRYPT_FLAG >> 16) & 0xFF);
-    header_buff[6] = (int)((ENCRYPT_FLAG >> 8) & 0XFF);
-    header_buff[7] = (int)((ENCRYPT_FLAG & 0XFF));
+    header_buff[4] = (uint8_t)((ENCRYPT_FLAG >> 24) & 0xFF);
+    header_buff[5] = (uint8_t)((ENCRYPT_FLAG >> 16) & 0xFF);
+    header_buff[6] = (uint8_t)((ENCRYPT_FLAG >> 8) & 0XFF);
+    header_buff[7] = (uint8_t)((ENCRYPT_FLAG & 0XFF));
 
     //TODO: we can add data store information as well
 
@@ -140,7 +140,7 @@ entropy_snd_start(int peer_socket, size_t header_size, size_t buffer_size, size_
     ssize_t			data_trasmitted = 0;
     FILE			*fp = NULL;
     int             fd;
-    char            data_buff[buffer_size];
+    unsigned char data_buff[buffer_size];
     unsigned char ciphertext[cipher_size];
     int ciphertext_len = 0;
     size_t 			aof_bytes_read;
@@ -204,7 +204,7 @@ entropy_snd_start(int peer_socket, size_t header_size, size_t buffer_size, size_
     /* Last chunk size is calculated by subtracting from the total file size
      * the size of each chunk excluding the last one.
      */
-   	last_chunk_size = (long)(file_stat.st_size - (nchunk-1) * buffer_size);
+    last_chunk_size = (size_t)(file_stat.st_size - (off_t)((size_t)(nchunk-1) * buffer_size));
 
 	loga("HEADER INFO: file size: %d -- buffer size: %d -- cipher size: %d -- encryption: %d ",
 			(int)file_stat.st_size, buffer_size, cipher_size, ENCRYPT_FLAG);
@@ -246,14 +246,14 @@ entropy_snd_start(int peer_socket, size_t header_size, size_t buffer_size, size_
     	/* Capture the current time, the elapsed time, and the bytes */
     	gettimeofday(&now, NULL);
     	throttle_elapsed_usec = (now.tv_sec-throttle_start_sec)*1000000 + now.tv_usec-throttle_start_usec;
-    	throttle_bytes += aof_bytes_read;
+    	throttle_bytes += (ssize_t)aof_bytes_read;
 
     	/* Determine the expected throughput on the usec level */
     	throttle_current_rate_usec = (suseconds_t) 1000000 * throttle_bytes/THROUGHPUT_THROTTLE;
 
     	/* if the rate is higher than the expected, then wait for the corresponding time to throttle it */
     	if (throttle_current_rate_usec  > throttle_elapsed_usec ){
-    		usleep(throttle_current_rate_usec - throttle_elapsed_usec);
+    		usleep((useconds_t)(throttle_current_rate_usec - throttle_elapsed_usec));
     		throttle_bytes = 0;
     		throttle_start_sec = now.tv_sec;
     		throttle_start_usec = now.tv_usec;
