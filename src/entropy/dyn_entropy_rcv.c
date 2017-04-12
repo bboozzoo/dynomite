@@ -103,12 +103,13 @@ entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_
     	    goto error;
     	}
     	loga("Bytes read %zd", bytesRead);
-    	if( entropy_decrypt (ciphertext, buffer_size, buff) < 0 )
+     int dec = entropy_decrypt (ciphertext, buffer_size, buff);
+    	if(dec < 0 || (size_t)dec < sizeof(uint32_t))
     	{
         	log_error("Error decrypting the AOF file size");
          	goto error;
     	}
-    	numberOfKeys = ntohl(buff);
+    	numberOfKeys = (int) ntohl(*(uint32_t*)buff);
 
     }
     else{
@@ -146,12 +147,13 @@ entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_
         	   log_error("Error on receiving aof size --> %s", strerror(errno));
         	   goto error;
         	}
-           	if( entropy_decrypt (ciphertext, buffer_size, buff) < 0 )
+          int dec = entropy_decrypt (ciphertext, buffer_size, buff);
+          if( dec < 0 || (size_t)dec < sizeof(uint32_t))
             {
                 log_error("Error decrypting the buffer for AOF file size");
                 goto error;
             }
-           	keyValueLength = ntohl(buff);
+          keyValueLength = (int32_t)ntohl(*(uint32_t *)buff);
         	log_info("AOF Length: %d", keyValueLength);
             memset(&aof[0], 0, sizeof(aof));
             if( read(peer_socket, ciphertext, cipher_size) < 1 ){
