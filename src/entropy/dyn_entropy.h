@@ -54,12 +54,12 @@ rstatus_t entropy_conn_start(struct entropy *cn);
 void entropy_conn_destroy(struct entropy *cn);
 rstatus_t entropy_listen(struct entropy *cn);
 
-int entropy_encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *ciphertext);
-int entropy_decrypt(unsigned char *plaintext, int plaintext_len, unsigned char *ciphertext);
+int entropy_encrypt(unsigned char *plaintext, size_t plaintext_len, unsigned char *ciphertext);
+int entropy_decrypt(unsigned char *plaintext, size_t plaintext_len, unsigned char *ciphertext);
 rstatus_t entropy_key_iv_load(struct context *ctx);
 
-rstatus_t entropy_snd_start(int peer_socket, int header_size, int buffer_size, int cipher_size);
-rstatus_t entropy_rcv_start(int peer_socket, int header_size, int buffer_size, int cipher_size);
+rstatus_t entropy_snd_start(int peer_socket, size_t header_size, size_t buffer_size, size_t cipher_size);
+rstatus_t entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_t cipher_size);
 
 
 #endif  /* _DYN_ENTROPY_H_ */

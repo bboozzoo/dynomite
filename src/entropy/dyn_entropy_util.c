@@ -144,7 +144,7 @@ entropy_crypto_deinit(void)
  */
 
 int
-entropy_decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *plaintext)
+entropy_decrypt(unsigned char *ciphertext, size_t ciphertext_len, unsigned char *plaintext)
 {
   EVP_CIPHER_CTX *ctx;
 
@@ -163,7 +163,7 @@ entropy_decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *pl
   /* Provide the message to be decrypted, and obtain the encrypted output.
    * EVP_EncryptUpdate can be called multiple times if necessary
    */
-  if(1 != EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, ciphertext_len))
+  if(1 != EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, (int)ciphertext_len))
      goto error;
 
   plaintext_len = len;
@@ -203,7 +203,7 @@ error:
  */
 
 int
-entropy_encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *ciphertext)
+entropy_encrypt(unsigned char *plaintext, size_t plaintext_len, unsigned char *ciphertext)
 {
   EVP_CIPHER_CTX *ctx;
 
@@ -226,7 +226,7 @@ entropy_encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *ciph
   /* Provide the message to be encrypted, and obtain the encrypted output.
    * EVP_EncryptUpdate can be called multiple times if necessary
    */
-  if(1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len))
+  if(1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, (int)plaintext_len))
 	  goto error;
 
   ciphertext_len = len;
@@ -411,7 +411,7 @@ entropy_key_iv_load(struct context *ctx){
     }
 
     /* 6. reading the files for the key and iv */
-    if (fgets(buff,BUFFER_SIZE-1,key_file) == NULL){
+    if (fgets((char*)buff,BUFFER_SIZE-1,key_file) == NULL){
        	log_error("Processing Key file error");
        	return DN_ERROR;
     }
@@ -419,7 +419,7 @@ entropy_key_iv_load(struct context *ctx){
     loga("key loaded: %s", theKey);
 
     memset( buff, '\0', BUFFER_SIZE );
-    if (fgets(buff,BUFFER_SIZE-1,iv_file) == NULL){
+    if (fgets((char*)buff,BUFFER_SIZE-1,iv_file) == NULL){
     	log_error("Processing IV file error");
     	return DN_ERROR;
     }

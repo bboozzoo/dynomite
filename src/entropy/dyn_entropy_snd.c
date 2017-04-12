@@ -133,7 +133,7 @@ entropy_snd_stats(int current_chunk, time_t elapsed_time, double chunk_thr, doub
  * Processes the AOF and transmits to the entropy engine
  */
 rstatus_t
-entropy_snd_start(int peer_socket, int header_size, int buffer_size, int cipher_size){
+entropy_snd_start(int peer_socket, size_t header_size, size_t buffer_size, size_t cipher_size){
 
     struct stat     file_stat;
     ssize_t         transmit_len;

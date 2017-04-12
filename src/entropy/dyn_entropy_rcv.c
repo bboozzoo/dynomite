@@ -73,7 +73,7 @@ entropy_redis_connector(void){
  * and pushes them to Redis.
  */
 rstatus_t
-entropy_rcv_start(int peer_socket, int header_size, int buffer_size, int cipher_size){
+entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_t cipher_size){
 
     int 			redis_socket = 0;
     char 			aof[buffer_size];
