@@ -524,6 +524,7 @@ conf_pool_transform(struct server_pool *sp, struct conf_pool *cp)
 static void
 conf_dump(struct conf *cf)
 {
+#ifdef DN_DEBUG_LOG
     uint32_t j;
     struct string *s;
 
@@ -604,6 +605,7 @@ conf_dump(struct conf *cf)
     log_debug(LOG_VVERB, "  max_msgs: %d", cp->alloc_msgs_max);
 
     log_debug(LOG_VVERB, "  dc: \"%.*s\"", cp->dc.len, cp->dc.data);
+#endif
 }
 
 static rstatus_t
