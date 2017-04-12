@@ -91,8 +91,8 @@ florida_get_seeds(struct context * ctx, struct mbuf *seeds_buf) {
     evalOSVar();
 
     struct sockaddr_in *remote;
-    uint32_t tmpres;
     int sock;
+    ssize_t tmpres;
     uint8_t buf[BUFSIZ + 1];
 
     log_debug(LOG_VVERB, "Running florida_get_seeds!");
@@ -127,7 +127,7 @@ florida_get_seeds(struct context * ctx, struct mbuf *seeds_buf) {
             dn_free(remote);
             return DN_ERROR;
         }
-        sent += tmpres;
+        sent += (uint32_t)tmpres;
     }
 
     mbuf_rewind(seeds_buf);
