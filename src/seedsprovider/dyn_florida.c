@@ -35,7 +35,7 @@ static char * request     = NULL;
 static int  isOsVarEval   = 0;
 
 static void evalOSVar();
-static uint32_t create_tcp_socket();
+static int create_tcp_socket();
 
 static int64_t last = 0; //storing last time for seeds check
 static uint32_t last_seeds_hash = 0;
@@ -91,8 +91,8 @@ florida_get_seeds(struct context * ctx, struct mbuf *seeds_buf) {
     evalOSVar();
 
     struct sockaddr_in *remote;
-    uint32_t sock;
     uint32_t tmpres;
+    int sock;
     uint8_t buf[BUFSIZ + 1];
 
     log_debug(LOG_VVERB, "Running florida_get_seeds!");
@@ -191,9 +191,9 @@ florida_get_seeds(struct context * ctx, struct mbuf *seeds_buf) {
 }
 
 
-uint32_t create_tcp_socket()
+int create_tcp_socket()
 {
-    uint32_t sock;
+    int sock;
     if((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
         log_debug(LOG_VVERB, "Unable to create TCP socket");
         return DN_ERROR;
