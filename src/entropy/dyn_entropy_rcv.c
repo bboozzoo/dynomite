@@ -80,7 +80,6 @@ entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_
     unsigned char buff[buffer_size];
     unsigned char ciphertext[cipher_size];
     int32_t 		keyValueLength;
-    int32_t			tempInt;
     int 			i = 0;
     int 			numberOfKeys;
 	int redis_written_bytes = 0;
@@ -113,11 +112,12 @@ entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_
 
     }
     else{
-        if( read(peer_socket, &tempInt, sizeof(int32_t)) < 1 ){
+        uint32_t	temp = 0;
+        if( read(peer_socket, &temp, sizeof(temp)) < 1 ){
         	log_error("Error on receiving number of keys --> %s", strerror(errno));
         	goto error;
         }
-        numberOfKeys = ntohl(tempInt);
+        numberOfKeys = (int)ntohl(temp);
     }
     if (numberOfKeys < 0) {
     	log_error("receive header not processed properly");
