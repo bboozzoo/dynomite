@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include <getopt.h>
 #include <dyn_token.h>
+#include <dyn_hashkit.h>
+
 static struct option long_options[] = {
     { "help",                 no_argument,        NULL,   'h' },
     { "outputkey",           no_argument,        NULL,   'k' },
@@ -14,8 +16,9 @@ static char short_options[] = "hki:o:";
 bool outputkey = false;
 char * key_filename = NULL;
 char * token_filename = NULL;
+
 static void
-print_usage()
+print_usage(void)
 {
     printf("Usage: dyno-hash-tool [-hk] -i <filename> -o <output filename>\n");
     printf("Read a key from input, hash key to create token, then output token to output.\n");
@@ -36,7 +39,7 @@ print_usage()
 static int 
 dn_get_options(int argc, char **argv)
 {
-    int c, value;
+    int c;
 
     opterr = 0;
 
@@ -121,11 +124,11 @@ int main(int argc, char **argv)
         }
         struct dyn_token d;
         init_dyn_token(&d);
-        hash_murmur(line, read, &d);
-        log_debug(LOG_VERB, "KEY (%s) Token: %lu", line, *d.mag);
+        hash_murmur(line, (size_t) read, &d);
+        log_debug(LOG_VERB, "KEY (%s) Token: %" PRIu32, line, *d.mag);
         if (outputkey)
             fprintf(ofp, "KEY:%s\n", line);
-        fprintf(ofp, "%lu\n", *d.mag);
+        fprintf(ofp, "%" PRIu32 "\n", *d.mag);
     }
 
     fclose(ofp);
