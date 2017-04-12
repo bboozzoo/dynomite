@@ -76,14 +76,12 @@ rstatus_t
 entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_t cipher_size){
 
     int 			redis_socket = 0;
-    char 			aof[buffer_size];
+    unsigned char	aof[buffer_size];
     unsigned char buff[buffer_size];
     unsigned char ciphertext[cipher_size];
     int32_t 		keyValueLength;
     int 			i = 0;
     int 			numberOfKeys;
-	int redis_written_bytes = 0;
-
 
 
     /* Check the encryption flag and initialize the crypto */
@@ -155,7 +153,7 @@ entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_
             }
           keyValueLength = (int32_t)ntohl(*(uint32_t *)buff);
         	log_info("AOF Length: %d", keyValueLength);
-            memset(&aof[0], 0, sizeof(aof));
+            memset(aof, 0, sizeof(aof));
             if( read(peer_socket, ciphertext, cipher_size) < 1 ){
                 log_error("Error on receiving aof size --> %s", strerror(errno));
                 goto error;
@@ -172,18 +170,18 @@ entropy_rcv_start(int peer_socket, size_t header_size, size_t buffer_size, size_
             	log_error("Error on receiving aof size --> %s", strerror(errno));
             	goto error;
             }
-           	keyValueLength = ntohl(keyValueLength);
+           	keyValueLength = (int32_t)ntohl((uint32_t)keyValueLength);
         	log_info("AOF Length: %d", keyValueLength);
             memset(&aof[0], 0, sizeof(aof));
 
             /* Step 2: Read the key/Value using the keyValueLength */
-           	if( read(peer_socket, &aof, keyValueLength) < 1 ){
+           	if( read(peer_socket, &aof, (size_t)keyValueLength) < 1 ){
             	log_error("Error on receiving aof file --> %s", strerror(errno));
             	goto error;
             }
         }
        	loga("Key: %d/%d - Redis serialized form: \n%s", i+1,numberOfKeys,aof);
-       	redis_written_bytes = write(redis_socket, &aof, keyValueLength);
+       	ssize_t redis_written_bytes = write(redis_socket, &aof, (size_t)keyValueLength);
        	if( redis_written_bytes < 1 ){
         	log_error("Error on writing to Redis, bytes: %d --> %s", redis_written_bytes, strerror(errno));
         	goto error;
