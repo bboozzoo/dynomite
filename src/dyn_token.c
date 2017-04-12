@@ -53,7 +53,7 @@ deinit_dyn_token(struct dyn_token *token)
 rstatus_t 
 size_dyn_token(struct dyn_token *token, uint32_t token_len)
 {
-	uint32_t size = sizeof(uint32_t) * token_len;
+	size_t size = sizeof(uint32_t) * token_len;
 	token->mag = dn_alloc(size);
 	if (token->mag == NULL) {
 		return DN_ENOMEM;
@@ -106,7 +106,7 @@ add_next_word(uint32_t *buf, uint32_t len, uint32_t next_int)
 	/* magick! */
 	uint32_t radix_val = 0x17179149;
 	int i;
-	for (i = len - 1; i >= 0; i--) {
+	for (i = (int)(len - 1); i >= 0; i--) {
 		product = radix_val * buf[i] + carry;
 		buf[i] = (uint32_t)product;
 		carry = product >> 32;
@@ -115,7 +115,7 @@ add_next_word(uint32_t *buf, uint32_t len, uint32_t next_int)
 	uint64_t sum = buf[len-1] + next_int;
 	buf[len-1] = (uint32_t)sum;
 	carry = sum >> 32;
-	for (i = len-2; i >= 0; i--) {
+	for (i = (int)(len-2); i >= 0; i--) {
 		sum = buf[i] + carry;
 		buf[i] = (uint32_t)sum;
 		carry = sum >> 32;
@@ -134,7 +134,7 @@ parse_dyn_token(uint8_t *start, uint32_t len, struct dyn_token *token)
 	uint8_t *q = p + len;
 	uint32_t digits = len;
 	if (p[0] == sign) {
-		token->signum = -1;
+		token->signum = (uint32_t)-1;
 		p++;
 		digits--;
 		ASSERT(digits > 0);
@@ -144,7 +144,7 @@ parse_dyn_token(uint8_t *start, uint32_t len, struct dyn_token *token)
 		token->signum = 1;
 	}
 
-	int nwords;
+	size_t nwords;
 	/* if (digits < 10) { */
 	nwords = 1;
 	/* } else { */
@@ -158,7 +158,7 @@ parse_dyn_token(uint8_t *start, uint32_t len, struct dyn_token *token)
 	}
 	memset(token->mag, 0, nwords * sizeof(uint32_t));
 	uint32_t *buf = token->mag;
-	token->len = nwords;
+	token->len = (uint32_t) nwords;
 
 	// Process first (potentially short) digit group
 	uint32_t first_group_len = digits % DIGITS_PER_INT;
@@ -170,7 +170,7 @@ parse_dyn_token(uint8_t *start, uint32_t len, struct dyn_token *token)
 	// Process remaining digit groups
 	while (p < q) {
 		uint32_t local_int = dn_atoui(p, DIGITS_PER_INT);
-		add_next_word(buf, nwords, local_int);
+		add_next_word(buf, (uint32_t)nwords, local_int);
 		p += DIGITS_PER_INT;
 	}
 
@@ -189,7 +189,7 @@ cmp_dyn_token(struct dyn_token *t1, struct dyn_token *t2)
 		}
 
 		if (t1-> len == t2->len) {
-			int i;
+			size_t i;
 			for (i = 0; i < t1->len; i++) {
 				uint32_t a = t1->mag[i];
 				uint32_t b = t2->mag[i];
