@@ -163,7 +163,7 @@ static struct string msg_type_strings[] = {
 #undef DEFINE_ACTION
 
 int
-print_req(FILE *stream, struct msg *req)
+print_req(FILE *stream, const struct msg *req)
 {
     struct string *req_type = msg_type_string(req->type);
     return fprintf(stream, "<REQ %p %lu:%lu %.*s>", req, req->id, req->parent_id,
@@ -171,7 +171,7 @@ print_req(FILE *stream, struct msg *req)
 }
 
 int
-print_rsp(FILE *stream, struct msg *rsp)
+print_rsp(FILE *stream, const struct msg *rsp)
 {
     return fprintf(stream, "<RSP %p %lu:%lu>", rsp, rsp->id, rsp->parent_id);
 }

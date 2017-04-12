@@ -422,8 +422,8 @@ msg_handle_response(struct msg *req, struct msg *rsp)
     return req->rsp_handler(req, rsp);
 }
 
-int print_req(FILE *stream, struct msg *req);
-int print_rsp(FILE *stream, struct msg *rsp);
+int print_req(FILE *stream, const struct msg *req);
+int print_rsp(FILE *stream, const struct msg *rsp);
 size_t msg_free_queue_size(void);
 
 struct msg *msg_tmo_min(void);
