@@ -527,7 +527,7 @@ core_timeout(struct context *ctx)
 		now = dn_msec_now();
 		if (now < then) {
 			int delta = (int)(then - now);
-			ctx->timeout = MIN(delta, ctx->max_timeout);
+			ctx->timeout = DYN_MIN(delta, ctx->max_timeout);
 			return;
 		}
 
@@ -702,7 +702,7 @@ core_loop(struct context *ctx)
 
     core_timeout(ctx);
     execute_expired_tasks(0);
-    ctx->timeout = MIN(ctx->timeout, time_to_next_task());
+    ctx->timeout = DYN_MIN(ctx->timeout, time_to_next_task());
     nsd = event_wait(ctx->evb, ctx->timeout);
     if (nsd < 0) {
         return nsd;

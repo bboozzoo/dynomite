@@ -70,7 +70,7 @@ log_init(int level, char *name)
 {
     struct logger *l = &logger;
 
-    l->level = MAX(LOG_EMERG, MIN(level, LOG_PVERB));
+    l->level = DYN_MAX(LOG_EMERG, DYN_MIN(level, LOG_PVERB));
     l->name = name;
     if (name == NULL || !strlen(name)) {
         l->fd = STDERR_FILENO;
@@ -143,7 +143,7 @@ log_level_set(int level)
 {
     struct logger *l = &logger;
 
-    l->level = MAX(LOG_EMERG, MIN(level, LOG_PVERB));
+    l->level = DYN_MAX(LOG_EMERG, DYN_MIN(level, LOG_PVERB));
     loga("set log level to %d", l->level);
 }
 

@@ -32,8 +32,8 @@
 
 #define NELEMS(a)           ((sizeof(a)) / sizeof((a)[0]))
 
-#define MIN(a, b)           ((a) < (b) ? (a) : (b))
-#define MAX(a, b)           ((a) > (b) ? (a) : (b))
+#define DYN_MIN(a, b)           ((a) < (b) ? (a) : (b))
+#define DYN_MAX(a, b)           ((a) > (b) ? (a) : (b))
 
 #define SQUARE(d)           ((d) * (d))
 #define VAR(s, s2, n)       (((n) < 2) ? 0.0 : ((s2) - SQUARE(s)/(n)) / ((n) - 1))
