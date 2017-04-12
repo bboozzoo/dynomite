@@ -194,8 +194,11 @@ entropy_snd_start(int peer_socket, size_t header_size, size_t buffer_size, size_
 	 * if the size of the file is larger than the Buffer size
 	 * then split it, otherwise we need one chunk only.
 	 *  */
-	if(file_stat.st_size > buffer_size){
-		nchunk = (int)(ceil(file_stat.st_size/buffer_size) + 1);
+  if(file_stat.st_size > (off_t)buffer_size){
+    off_t chunks = file_stat.st_size / (off_t)buffer_size;
+    if (file_stat.st_size % (off_t)buffer_size != 0)
+      chunks += 1;
+		nchunk = (int)chunks;
 	}
 	else{
 		nchunk = 1;
