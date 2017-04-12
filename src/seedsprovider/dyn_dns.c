@@ -90,7 +90,7 @@ dns_get_seeds(struct context * ctx, struct mbuf *seeds_buf)
         log_debug(LOG_DEBUG, "DNS response for %s: %s", txtName, hstrerror(h_errno));
         return DN_NOOPS;
     }
-    if (qr >= sizeof(buf)) {
+    if ((size_t)qr >= sizeof(buf)) {
         log_debug(LOG_DEBUG, "DNS reply is too large for %s: %d, bufsize: %d", txtName, r, sizeof(buf));
         return DN_NOOPS;
     }
