@@ -204,7 +204,7 @@ AS_IF([test "x$with_host_libyaml" = "xno"],
   # use bundled libyaml
 
    # Untar the yaml-0.1.4 in contrib/ before config.status is rerun
-   AC_CONFIG_COMMANDS_PRE([tar xvfz contrib/yaml-0.1.4.tar.gz -C contrib])
+   AC_CONFIG_COMMANDS_PRE([tar xvfz ${srcdir}/contrib/yaml-0.1.4.tar.gz -C ${srcdir}/contrib])
    # Call yaml-0.1.4 ./configure recursively
    AC_CONFIG_SUBDIRS([contrib/yaml-0.1.4])
 
